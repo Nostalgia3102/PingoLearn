@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/viewmodels/sign_up_screen_view_model.dart';
+import '../../utils/constants/colors.dart';
 import '../../utils/constants/strings.dart';
 import '../../utils/constants/validations.dart';
 import '../../utils/utilities.dart';
@@ -14,16 +15,18 @@ class SignUpScreen extends StatelessWidget {
     return Consumer<SignUpScreenViewModel>(
       builder: (context, provider, child) {
         return Scaffold(
+          backgroundColor: AppColors.color4,
           resizeToAvoidBottomInset: false,
           body: SafeArea(
             maintainBottomViewPadding: true,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height * 0.025),
                   buildSignUpTitle(),
-                  buildSignUpSubTitle(),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   Form(
                     key: provider.signUpFormKey,
@@ -37,14 +40,18 @@ class SignUpScreen extends StatelessWidget {
                                   provider,
                                   StringsAsset.enterName,
                                   StringsAsset.nameLabelText)),
-                          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.02),
                           SizedBox(
                               height: 60.0,
                               child: buildTextFormField(
                                   provider,
                                   StringsAsset.enterEmail,
                                   StringsAsset.emailLabelText)),
-                          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.02),
                           SizedBox(
                             height: 60,
                             child: buildTextFormField(
@@ -52,50 +59,19 @@ class SignUpScreen extends StatelessWidget {
                                 StringsAsset.enterPassword,
                                 StringsAsset.passwordLabelText),
                           ),
-                          SizedBox(height: MediaQuery.of(context).size.height * 0.025),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.025),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.0),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: buildElevatedSignUpButton(provider, context),
-                    ),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.045),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 100,
-                        height: 1,
-                        child: Container(
-                          color: Colors.black54,
-                        ),
-                      ),
-                      const Text(
-                        "  Continue with  ",
-                        style: TextStyle(color: Colors.black54),
-                      ),
-                      SizedBox(
-                        width: 100,
-                        height: 1,
-                        child: Container(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.025),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.3),
                   Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 8, 8, 14),
-                        child: buildRowFooterText(context),
-                      ))
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 14),
+                    child: buildRowFooterText(provider, context),
+                  ))
                 ],
               ),
             ),
@@ -105,46 +81,52 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
-  Row buildRowFooterText(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.end,
+  Column buildRowFooterText(SignUpScreenViewModel provider,BuildContext context) {
+    return Column(
       children: [
-        const Text(
-          "Have an Account ?",
-          style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black54),
+        buildElevatedSignUpButton(provider, context),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            const Text(
+              "Already have an Account ?",
+              style: TextStyle(fontWeight:FontWeight.normal, color: Colors.black),
+            ),
+            const SizedBox(width: 5),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                "Login",
+                style: TextStyle(
+                    color: AppColors.color1, fontWeight: FontWeight.bold),
+              ),
+            )
+          ],
         ),
-        const SizedBox(width: 5),
-        GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: const Text(
-            "Sign In",
-            style: TextStyle(
-                color: Colors.deepOrange, fontWeight: FontWeight.bold),
-          ),
-        )
       ],
     );
   }
 
-  ElevatedButton buildElevatedSignUpButton(SignUpScreenViewModel provider,
-      BuildContext context) {
+  ElevatedButton buildElevatedSignUpButton(
+      SignUpScreenViewModel provider, BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(Colors.deepOrange),
+          backgroundColor: WidgetStateProperty.all(AppColors.color1),
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(12)),
-                side: BorderSide(color: Colors.deepOrange)),
+                side: BorderSide(color: AppColors.color1)),
           )),
       onPressed: () async {
         provider.setRegisterPressed(provider, true);
         if (provider.signUpFormKey.currentState?.validate() ?? false) {
           provider.signUpFormKey.currentState?.save();
           bool result =
-          await authService.register(provider.email!, provider.password!);
+              await authService.register(provider.email!, provider.password!);
           print(result);
           if (result) {
             navigationService.pushReplacementNamed("/home_page");
@@ -173,17 +155,19 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
-  TextFormField buildTextFormField(SignUpScreenViewModel provider,
-      String cautionText, String labelText) {
+  TextFormField buildTextFormField(
+      SignUpScreenViewModel provider, String cautionText, String labelText) {
     return TextFormField(
         keyboardType: (labelText == "Phone Number")
             ? TextInputType.phone
-            : (labelText == "Email") ? TextInputType.emailAddress : TextInputType.text,
-
+            : (labelText == "Email")
+                ? TextInputType.emailAddress
+                : TextInputType.text,
         validator: (value) {
           print("INSIDE THE CHECKER");
           if (value != null &&
-              labelText == "Full name" && NAME_VALIDATION_REGEX.hasMatch(value)) {
+              labelText == "Full name" &&
+              NAME_VALIDATION_REGEX.hasMatch(value)) {
             print("INSIDE THE FULL NAME FIELD");
             provider.name = value;
             return null;
@@ -209,17 +193,18 @@ class SignUpScreen extends StatelessWidget {
         },
         obscureText: (labelText == "Password")
             ? provider.eyeButton
-            ? false
-            : true
+                ? false
+                : true
             : false,
-        autovalidateMode: provider.registerPressed ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-
+        autovalidateMode: provider.registerPressed
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             labelText: labelText,
             fillColor: Colors.blue,
             contentPadding:
-            const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             errorStyle: const TextStyle(
               color: Colors.red,
               fontSize: 12,
@@ -236,13 +221,13 @@ class SignUpScreen extends StatelessWidget {
             ),
             suffixIcon: (labelText == "Password")
                 ? IconButton(
-              onPressed: () {
-                provider.toggleEyeButton(provider, !provider.eyeButton);
-              },
-              icon: provider.eyeButton
-                  ? const Icon(Icons.visibility)
-                  : const Icon(Icons.visibility_off),
-            )
+                    onPressed: () {
+                      provider.toggleEyeButton(provider, !provider.eyeButton);
+                    },
+                    icon: provider.eyeButton
+                        ? const Icon(Icons.visibility)
+                        : const Icon(Icons.visibility_off),
+                  )
                 : const SizedBox.shrink(),
             focusedErrorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -253,29 +238,14 @@ class SignUpScreen extends StatelessWidget {
                 gapPadding: 0)));
   }
 
-  Text buildSignUpSubTitle() {
-    return const Text(
-      "  Fill in your registration information",
-      style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w500),
-    );
-  }
-
-  Row buildSignUpTitle() {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          " Sign ",
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
-        ),
-        Text(
-          "Up",
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-              color: Colors.deepOrange),
-        ),
-      ],
-    );
+  Padding buildSignUpTitle() {
+    return const Padding(
+        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+        child: Text(" e-Shop ",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                fontFamily: 'Poppins',
+                color: AppColors.color1)));
   }
 }

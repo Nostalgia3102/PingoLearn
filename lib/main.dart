@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pingo_learn_demo_app/services/navigation_service.dart';
+import 'package:pingo_learn_demo_app/ui/remote_config_example.dart';
 import 'package:pingo_learn_demo_app/utils/constants/strings.dart';
 import 'package:pingo_learn_demo_app/utils/utilities.dart';
 import 'package:provider/provider.dart';

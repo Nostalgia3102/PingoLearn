@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pingo_learn_demo_app/utils/constants/colors.dart';
 import 'package:provider/provider.dart';
 import '../../data/viewmodels/login_screen_view_model.dart';
 import '../../utils/constants/strings.dart';
@@ -20,16 +21,18 @@ class _LoginScreenState extends State<LoginScreen> {
     return Consumer<LoginScreenViewModel>(
       builder: (context, provider, child) {
         return Scaffold(
+          backgroundColor: AppColors.color4,
           resizeToAvoidBottomInset: false,
           body: SafeArea(
             maintainBottomViewPadding: true,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                   buildLoginTitle(),
-                  buildLoginSubTitle(),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.07),
                   Form(
                     key: provider.loginFormKey,
@@ -57,60 +60,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                               height:
                               MediaQuery.of(context).size.height * 0.01),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: const Text(
-                                "Forgot your password ?",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black54),
-                              ),
-                            ),
-                          ),
+
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: buildElevatedLoginButton(provider, context),
-                    ),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 100,
-                        height: 1,
-                        child: Container(
-                          color: Colors.black54,
-                        ),
-                      ),
-                      const Text(
-                        "  Continue with  ",
-                        style: TextStyle(color: Colors.black54),
-                      ),
-                      SizedBox(
-                        width: 100,
-                        height: 1,
-                        child: Container(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.025),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.4),
                   Expanded(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8, 8, 8, 14),
-                        child: buildRowFooterText(),
+                        child: buildRowFooterText(provider),
                       ))
                 ],
               ),
@@ -121,26 +80,32 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Row buildRowFooterText() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.end,
+  Column buildRowFooterText(LoginScreenViewModel provider) {
+    return Column(
       children: [
-        const Text(
-          "Not a member ?",
-          style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black54),
+        buildElevatedLoginButton(provider, context),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            const Text(
+              "New here?",
+              style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black),
+            ),
+            const SizedBox(width: 5),
+            GestureDetector(
+              onTap: () {
+                navigationService.pushNamed("/sign_up");
+              },
+              child: const Text(
+                "Signup",
+                style: TextStyle(
+                    color: AppColors.color1, fontWeight: FontWeight.bold),
+              ),
+            )
+          ],
         ),
-        const SizedBox(width: 5),
-        GestureDetector(
-          onTap: () {
-            navigationService.pushNamed("/sign_up");
-          },
-          child: const Text(
-            "Register Now",
-            style: TextStyle(
-                color: Colors.deepOrange, fontWeight: FontWeight.bold),
-          ),
-        )
       ],
     );
   }
@@ -149,11 +114,11 @@ class _LoginScreenState extends State<LoginScreen> {
       LoginScreenViewModel provider, BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(Colors.deepOrange),
+          backgroundColor: WidgetStateProperty.all(AppColors.color1),
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(12)),
-                side: BorderSide(color: Colors.deepOrange)),
+                side: BorderSide(color: AppColors.color1)),
           )),
       onPressed: () async {
         loginPressed = true;
@@ -180,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       child: const Padding(
-        padding: EdgeInsets.all(12),
+        padding: EdgeInsets.fromLTRB(62, 12, 62, 12),
         child: Text(
           "Login",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -262,29 +227,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 gapPadding: BorderSide.strokeAlignOutside)));
   }
 
-  Text buildLoginSubTitle() {
-    return const Text(
-      "  Sign in to continue ;-)",
-      style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w500),
-    );
-  }
 
-  Row buildLoginTitle() {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          " Welcome ",
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
-        ),
-        Text(
-          "User",
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-              color: Colors.deepOrange),
-        ),
-      ],
+  Padding buildLoginTitle() {
+    return const Padding(
+      padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+      child: Text(
+        " e-Shop ",
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, fontFamily: 'Poppins', color: AppColors.color1),
+      ),
     );
   }
 }
