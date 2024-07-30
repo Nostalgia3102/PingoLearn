@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/viewmodels/sign_up_screen_view_model.dart';
+import '../../services/database_service.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/strings.dart';
 import '../../utils/constants/validations.dart';
@@ -128,7 +129,11 @@ class SignUpScreen extends StatelessWidget {
           bool result =
               await authService.register(provider.email!, provider.password!);
           print(result);
-          if (result) {
+          bool resultTwo = await DatabaseService().addUser(
+            fullName: provider.name ?? "NAME",
+            email: provider.email ?? "EMAIL",
+          );
+          if (resultTwo) {
             navigationService.pushReplacementNamed("/home_page");
           } else {
             final snackBar = SnackBar(
