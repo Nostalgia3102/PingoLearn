@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "407286126076",
+    "project_id": "pingolearndemo-8a94a",
+    "storage_bucket": "pingolearndemo-8a94a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407286126076:android:0012dad1d54df75e740e79",
+        "android_client_info": {
+          "package_name": "com.example.pingo_learn_demo_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGKsiMP88iSZA9ZNosTfeXEMLTjQqDW18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407286126076:android:3875442c40dab007740e79",
+        "android_client_info": {
+          "package_name": "com.sourin.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGKsiMP88iSZA9ZNosTfeXEMLTjQqDW18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
